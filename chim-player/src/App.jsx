@@ -1,10 +1,10 @@
 import Main from "components/main/main";
 import "./App.css";
 
-function App() {
+function App({ chimPlayer }) {
   return (
     <div className="App">
-      <Main />
+      <Main chimPlayer={chimPlayer} />
     </div>
   );
 }
