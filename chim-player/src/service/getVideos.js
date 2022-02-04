@@ -21,12 +21,15 @@ class ChimPlayer {
       params: {
         part: "snippet",
         chart: "mostPopular",
-        maxResults: 25,
+        maxResults: 3,
         type: "video",
         q: query,
       },
     });
-    return response.data.items.map((item) => ({ ...item, id: item.id.videId }));
+    return response.data.items.map((item) => ({
+      ...item,
+      id: item.id.videoId,
+    }));
   }
 }
 
