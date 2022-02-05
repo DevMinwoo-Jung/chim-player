@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import axios from "axios";
-import YOUTUBE_API_KEY from "keys";
+import YOUTUBE_API_KEY from "apiKeys";
 import App from "./App";
 import ChimPlayer from "./service/getVideos.js";
 

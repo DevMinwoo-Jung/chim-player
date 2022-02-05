@@ -27,6 +27,7 @@ function Main({ chimPlayer }) {
     }
     if (likeVideos.indexOf(video.snippet.thumbnails.high.url) !== -1) {
       alert("이미 있슈!");
+      return;
     }
     likeVideos.push(video.snippet.thumbnails.high.url);
     likeVideos = [...likeVideos];
