@@ -5,7 +5,7 @@ function LikeVideos({ video, removeLike }) {
 
   return (
     <div key={video.id}>
-      <img src={video} alt="" />
+      <img src={video.snippet.thumbnails.default.url} alt="" />
       <button type="button" onClick={setRemoveLike}>
         지우기
       </button>
