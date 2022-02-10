@@ -7,16 +7,16 @@ function Search({ search }) {
   const searchRef = useRef();
 
   function saveSearchHistory(searchHistory) {
+    const ex = { searchHistory };
     let getSearchHistory = localStorage.getItem("searchHistory");
     if (getSearchHistory === null) {
       getSearchHistory = [];
     } else {
-      console.log(JSON.parse(getSearchHistory));
       getSearchHistory = JSON.parse(searchHistory);
+      console.log(getSearchHistory);
     }
-    getSearchHistory.push(searchHistory);
+    getSearchHistory.push(ex);
     getSearchHistory = [...getSearchHistory];
-    console.log(getSearchHistory);
     localStorage.setItem("searchHistory", JSON.stringify(getSearchHistory));
     setSearchHistory(getSearchHistory);
   }
