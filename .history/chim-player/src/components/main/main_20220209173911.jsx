@@ -20,13 +20,12 @@ function Main({ chimPlayer }) {
   }
 
   const onLikeVideoList = (video) => {
-    console.log(video);
     let likeVideos = localStorage.getItem("videoId");
     if (likeVideos === null) {
       likeVideos = [];
     } else {
+      console.log(JSON.parse(likeVideos));
       likeVideos = JSON.parse(likeVideos);
-      console.log(likeVideos);
     }
     if (likeVideos.indexOf(video) !== -1) {
       alert("이미 있슈!");

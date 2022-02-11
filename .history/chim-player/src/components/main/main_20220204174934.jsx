@@ -1,6 +1,5 @@
 import LikeVideos from "components/likeVideos/likeVideos";
 import Search from "components/search/Search";
-import VideoHistory from "components/videoHistory/VideoHistory";
 import VideoList from "components/videoList/VideoList";
 import { useCallback, useEffect, useState } from "react";
 
@@ -9,7 +8,6 @@ function Main({ chimPlayer }) {
   const [showVideo, setShowVideo] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [likeVideos, setLikeVideos] = useState([]);
-  const [videoHistory, setVideoHistory] = useState([]);
 
   function onPlayVideo(video) {
     const newVideo = video.id;
@@ -18,6 +16,7 @@ function Main({ chimPlayer }) {
     }
     setShowVideo(newVideo);
   }
+  console.log(likeVideos);
 
   const onLikeVideoList = (video) => {
     console.log(video);
@@ -26,38 +25,19 @@ function Main({ chimPlayer }) {
       likeVideos = [];
     } else {
       likeVideos = JSON.parse(likeVideos);
-      console.log(likeVideos);
     }
-    if (likeVideos.indexOf(video) !== -1) {
+    if (likeVideos.indexOf(video.snippet.thumbnails.high.url) !== -1) {
       alert("이미 있슈!");
-      return;
     }
-    likeVideos.push(video);
+    likeVideos.push(video.snippet.thumbnails.high.url);
     likeVideos = [...likeVideos];
     localStorage.setItem("videoId", JSON.stringify(likeVideos));
     setLikeVideos(likeVideos);
   };
 
-  const onSaveHistory = (video) => {
-    console.log(video);
-    // console.log(video);
-    let videoHistory = localStorage.getItem("videoHistory");
-    if (videoHistory === null) {
-      videoHistory = [];
-    } else {
-      videoHistory = JSON.parse(videoHistory);
-    }
-
-    videoHistory.push(video);
-    videoHistory = [...videoHistory];
-    localStorage.setItem("videoHistory", JSON.stringify(videoHistory));
-    setVideoHistory(videoHistory);
-    // console.log(videoHistory);
-  };
-
   const search = useCallback(
     (query) => {
-      // console.log(query);
+      console.log(query);
       setSelectedVideo(null);
       chimPlayer.search(query).then((videos) => {
         setVideos(videos);
@@ -75,17 +55,6 @@ function Main({ chimPlayer }) {
       showVideos = JSON.parse(showVideos);
     }
     setLikeVideos(showVideos);
-  }, []);
-
-  useEffect(() => {
-    let showHistory = localStorage.getItem("videoHistory");
-    if (likeVideos === null) {
-      showHistory = [];
-      setVideoHistory(showHistory);
-    } else {
-      showHistory = JSON.parse(showHistory);
-    }
-    setVideoHistory(showHistory);
   }, []);
 
   const selectVideo = (video) => {
@@ -121,7 +90,6 @@ function Main({ chimPlayer }) {
               // eslint-disable-next-line react/jsx-no-bind
               onPlayVideo={onPlayVideo}
               onLikeVideoList={onLikeVideoList}
-              onSaveHistory={onSaveHistory}
             />
           ))}
         {showVideo && (
@@ -137,16 +105,7 @@ function Main({ chimPlayer }) {
       </div>
       {likeVideos &&
         likeVideos.map((video) => (
-          <LikeVideos
-            removeLike={removeLike}
-            key={Math.random()}
-            video={video}
-          />
-        ))}
-
-      {videoHistory &&
-        videoHistory.map((video) => (
-          <VideoHistory key={Math.random()} video={video} />
+          <LikeVideos removeLike={removeLike} key={video.id} video={video} />
         ))}
     </div>
   );

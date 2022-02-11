@@ -7,18 +7,20 @@ function Search({ search }) {
   const searchRef = useRef();
 
   function saveSearchHistory(searchHistory) {
-    const ex = { searchHistory };
-    let getSearchHistoryhh = localStorage.getItem("searchHistory");
-    if (getSearchHistoryhh === null) {
-      getSearchHistoryhh = [];
+    let getSearchHistory = localStorage.getItem("searchHistory");
+    if (getSearchHistory === null) {
+      getSearchHistory = [];
     } else {
-      getSearchHistoryhh = JSON.parse(searchHistory);
-      console.log(getSearchHistoryhh);
+      console.log(JSON.parse(getSearchHistory));
+      getSearchHistory = JSON.parse(searchHistory);
     }
-    // getSearchHistoryhh.push(ex);
-    getSearchHistoryhh = [...getSearchHistoryhh, ex];
-    localStorage.setItem("searchHistory", JSON.stringify(getSearchHistoryhh));
-    setSearchHistory(getSearchHistoryhh);
+    console.log("asdasd");
+    console.log(getSearchHistory.push({ searchHistory }));
+    //    getSearchHistory.push(searchHistory);
+    getSearchHistory = [...getSearchHistory];
+    console.log(getSearchHistory);
+    localStorage.setItem("searchHistory", JSON.stringify(getSearchHistory));
+    setSearchHistory(getSearchHistory);
   }
 
   const setSearch = (event) => {

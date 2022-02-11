@@ -4,37 +4,26 @@ import React, { useEffect, useRef, useState } from "react";
 function Search({ search }) {
   const [showHistory, setShowHistory] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
-  const searchRef = useRef();
 
-  function saveSearchHistory(searchHistory) {
-    const ex = { searchHistory };
-    let getSearchHistoryhh = localStorage.getItem("searchHistory");
-    if (getSearchHistoryhh === null) {
-      getSearchHistoryhh = [];
+  const searchRef = useRef();
+  const saveSearchHistory = (searchHistory) => {
+    let getSearchHistory = localStorage.getItem("searchHistory");
+    if (getSearchHistory === null) {
+      getSearchHistory = [];
     } else {
-      getSearchHistoryhh = JSON.parse(searchHistory);
-      console.log(getSearchHistoryhh);
+      getSearchHistory = JSON.parse(searchHistory);
     }
-    // getSearchHistoryhh.push(ex);
-    getSearchHistoryhh = [...getSearchHistoryhh, ex];
-    localStorage.setItem("searchHistory", JSON.stringify(getSearchHistoryhh));
-    setSearchHistory(getSearchHistoryhh);
-  }
+    getSearchHistory.push(searchHistory);
+    getSearchHistory = [...getSearchHistory];
+    localStorage.setItem("searchHistory", JSON.stringify(getSearchHistory));
+    setSearchHistory(getSearchHistory);
+  };
 
   const setSearch = (event) => {
     event.preventDefault();
+    console.log(searchRef.current.value);
     search(searchRef.current.value);
-  };
-
-  const setSearchHistoryFnc = (event) => {
-    event.preventDefault();
     saveSearchHistory(searchRef.current.value);
-  };
-
-  const setEvents = (event) => {
-    event.preventDefault();
-    setSearch(event);
-    setSearchHistoryFnc(event);
   };
 
   const onShowHistory = () => {
@@ -54,10 +43,10 @@ function Search({ search }) {
 
   return (
     <div>
-      <form onSubmit={setEvents}>
+      <form onSubmit={setSearch}>
         <input type="text" ref={searchRef} onClick={onShowHistory} />
       </form>
-      {/* {showHistory && <SearchHistory searchHistory={searchHistory} />} */}
+      {showHistory && <SearchHistory searchHistory={searchHistory} />}
     </div>
   );
 }

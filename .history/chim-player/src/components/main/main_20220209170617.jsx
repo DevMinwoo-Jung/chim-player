@@ -20,13 +20,11 @@ function Main({ chimPlayer }) {
   }
 
   const onLikeVideoList = (video) => {
-    console.log(video);
     let likeVideos = localStorage.getItem("videoId");
     if (likeVideos === null) {
       likeVideos = [];
     } else {
       likeVideos = JSON.parse(likeVideos);
-      console.log(likeVideos);
     }
     if (likeVideos.indexOf(video) !== -1) {
       alert("이미 있슈!");
@@ -40,7 +38,6 @@ function Main({ chimPlayer }) {
 
   const onSaveHistory = (video) => {
     console.log(video);
-    // console.log(video);
     let videoHistory = localStorage.getItem("videoHistory");
     if (videoHistory === null) {
       videoHistory = [];
@@ -52,12 +49,12 @@ function Main({ chimPlayer }) {
     videoHistory = [...videoHistory];
     localStorage.setItem("videoHistory", JSON.stringify(videoHistory));
     setVideoHistory(videoHistory);
-    // console.log(videoHistory);
+    console.log(videoHistory);
   };
 
   const search = useCallback(
     (query) => {
-      // console.log(query);
+      console.log(query);
       setSelectedVideo(null);
       chimPlayer.search(query).then((videos) => {
         setVideos(videos);
@@ -146,7 +143,7 @@ function Main({ chimPlayer }) {
 
       {videoHistory &&
         videoHistory.map((video) => (
-          <VideoHistory key={Math.random()} video={video} />
+          <VideoHistory key={video.id} video={video} />
         ))}
     </div>
   );

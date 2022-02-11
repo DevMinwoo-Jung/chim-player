@@ -20,19 +20,17 @@ function Main({ chimPlayer }) {
   }
 
   const onLikeVideoList = (video) => {
-    console.log(video);
     let likeVideos = localStorage.getItem("videoId");
     if (likeVideos === null) {
       likeVideos = [];
     } else {
       likeVideos = JSON.parse(likeVideos);
-      console.log(likeVideos);
     }
-    if (likeVideos.indexOf(video) !== -1) {
+    if (likeVideos.indexOf(video.snippet.thumbnails.high.url) !== -1) {
       alert("이미 있슈!");
       return;
     }
-    likeVideos.push(video);
+    likeVideos.push(video.snippet.thumbnails.high.url);
     likeVideos = [...likeVideos];
     localStorage.setItem("videoId", JSON.stringify(likeVideos));
     setLikeVideos(likeVideos);
@@ -40,7 +38,6 @@ function Main({ chimPlayer }) {
 
   const onSaveHistory = (video) => {
     console.log(video);
-    // console.log(video);
     let videoHistory = localStorage.getItem("videoHistory");
     if (videoHistory === null) {
       videoHistory = [];
@@ -48,16 +45,15 @@ function Main({ chimPlayer }) {
       videoHistory = JSON.parse(videoHistory);
     }
 
-    videoHistory.push(video);
+    videoHistory.push(video.snippet.thumbnails.high.url);
     videoHistory = [...videoHistory];
     localStorage.setItem("videoHistory", JSON.stringify(videoHistory));
     setVideoHistory(videoHistory);
-    // console.log(videoHistory);
   };
 
   const search = useCallback(
     (query) => {
-      // console.log(query);
+      console.log(query);
       setSelectedVideo(null);
       chimPlayer.search(query).then((videos) => {
         setVideos(videos);
@@ -137,16 +133,12 @@ function Main({ chimPlayer }) {
       </div>
       {likeVideos &&
         likeVideos.map((video) => (
-          <LikeVideos
-            removeLike={removeLike}
-            key={Math.random()}
-            video={video}
-          />
+          <LikeVideos removeLike={removeLike} key={video.id} video={video} />
         ))}
 
       {videoHistory &&
         videoHistory.map((video) => (
-          <VideoHistory key={Math.random()} video={video} />
+          <VideoHistory key={video.id} video={video} />
         ))}
     </div>
   );

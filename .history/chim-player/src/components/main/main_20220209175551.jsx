@@ -26,7 +26,6 @@ function Main({ chimPlayer }) {
       likeVideos = [];
     } else {
       likeVideos = JSON.parse(likeVideos);
-      console.log(likeVideos);
     }
     if (likeVideos.indexOf(video) !== -1) {
       alert("이미 있슈!");

@@ -7,18 +7,19 @@ function Search({ search }) {
   const searchRef = useRef();
 
   function saveSearchHistory(searchHistory) {
-    const ex = { searchHistory };
-    let getSearchHistoryhh = localStorage.getItem("searchHistory");
-    if (getSearchHistoryhh === null) {
-      getSearchHistoryhh = [];
+    console.log(searchHistory);
+    let getSearchHistory = localStorage.getItem("searchHistory");
+    if (getSearchHistory === null) {
+      getSearchHistory = [];
     } else {
-      getSearchHistoryhh = JSON.parse(searchHistory);
-      console.log(getSearchHistoryhh);
+      console.log(searchHistory);
+      console.log(JSON.parse(searchHistory));
+      getSearchHistory = JSON.parse(searchHistory);
     }
-    // getSearchHistoryhh.push(ex);
-    getSearchHistoryhh = [...getSearchHistoryhh, ex];
-    localStorage.setItem("searchHistory", JSON.stringify(getSearchHistoryhh));
-    setSearchHistory(getSearchHistoryhh);
+    getSearchHistory.push(searchHistory);
+    getSearchHistory = [...getSearchHistory];
+    localStorage.setItem("searchHistory", JSON.stringify(getSearchHistory));
+    setSearchHistory(getSearchHistory);
   }
 
   const setSearch = (event) => {
@@ -57,7 +58,7 @@ function Search({ search }) {
       <form onSubmit={setEvents}>
         <input type="text" ref={searchRef} onClick={onShowHistory} />
       </form>
-      {/* {showHistory && <SearchHistory searchHistory={searchHistory} />} */}
+      {showHistory && <SearchHistory searchHistory={searchHistory} />}
     </div>
   );
 }

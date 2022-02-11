@@ -1,6 +1,4 @@
-import LikeVideos from "components/likeVideos/likeVideos";
 import Search from "components/search/Search";
-import VideoHistory from "components/videoHistory/VideoHistory";
 import VideoList from "components/videoList/VideoList";
 import { useCallback, useEffect, useState } from "react";
 
@@ -9,7 +7,6 @@ function Main({ chimPlayer }) {
   const [showVideo, setShowVideo] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [likeVideos, setLikeVideos] = useState([]);
-  const [videoHistory, setVideoHistory] = useState([]);
 
   function onPlayVideo(video) {
     const newVideo = video.id;
@@ -18,53 +15,20 @@ function Main({ chimPlayer }) {
     }
     setShowVideo(newVideo);
   }
+  console.log(likeVideos);
 
   const onLikeVideoList = (video) => {
-    console.log(video);
     let likeVideos = localStorage.getItem("videoId");
     if (likeVideos === null) {
       likeVideos = [];
     } else {
       likeVideos = JSON.parse(likeVideos);
-      console.log(likeVideos);
     }
-    if (likeVideos.indexOf(video) !== -1) {
-      alert("이미 있슈!");
-      return;
-    }
-    likeVideos.push(video);
+    likeVideos.push(video.snippet.thumbnails.high.url);
     likeVideos = [...likeVideos];
     localStorage.setItem("videoId", JSON.stringify(likeVideos));
     setLikeVideos(likeVideos);
   };
-
-  const onSaveHistory = (video) => {
-    console.log(video);
-    // console.log(video);
-    let videoHistory = localStorage.getItem("videoHistory");
-    if (videoHistory === null) {
-      videoHistory = [];
-    } else {
-      videoHistory = JSON.parse(videoHistory);
-    }
-
-    videoHistory.push(video);
-    videoHistory = [...videoHistory];
-    localStorage.setItem("videoHistory", JSON.stringify(videoHistory));
-    setVideoHistory(videoHistory);
-    // console.log(videoHistory);
-  };
-
-  const search = useCallback(
-    (query) => {
-      // console.log(query);
-      setSelectedVideo(null);
-      chimPlayer.search(query).then((videos) => {
-        setVideos(videos);
-      });
-    },
-    [chimPlayer]
-  );
 
   useEffect(() => {
     let showVideos = localStorage.getItem("videoId");
@@ -77,36 +41,30 @@ function Main({ chimPlayer }) {
     setLikeVideos(showVideos);
   }, []);
 
-  useEffect(() => {
-    let showHistory = localStorage.getItem("videoHistory");
-    if (likeVideos === null) {
-      showHistory = [];
-      setVideoHistory(showHistory);
-    } else {
-      showHistory = JSON.parse(showHistory);
-    }
-    setVideoHistory(showHistory);
-  }, []);
-
   const selectVideo = (video) => {
     setSelectedVideo(video);
   };
 
-  const removeLike = (video) => {
-    let likeVideos = localStorage.getItem("videoId");
-    likeVideos = JSON.parse(likeVideos);
-    if (likeVideos.indexOf(video) !== -1) {
-      likeVideos.splice(likeVideos.indexOf(video), 1);
-    }
+  const search = useCallback(
+    (query) => {
+      console.log(query);
+      setSelectedVideo(null);
+      chimPlayer.search(query).then((videos) => {
+        setVideos(videos);
+      });
+    },
+    [chimPlayer]
+  );
 
-    setLikeVideos(likeVideos);
-    likeVideos = [...likeVideos];
-    localStorage.setItem("videoId", JSON.stringify(likeVideos));
+  const removeLike = (video) => {
+    localStorage.removeItem(video);
   };
 
   useEffect(() => {
     chimPlayer.mostPopular().then((videos) => setVideos(videos));
-  }, []);
+  }, []); //
+
+  //  console.log(Object.keys(videos).map((key) => videos.items[key]));
 
   return (
     <div className="App">
@@ -121,7 +79,6 @@ function Main({ chimPlayer }) {
               // eslint-disable-next-line react/jsx-no-bind
               onPlayVideo={onPlayVideo}
               onLikeVideoList={onLikeVideoList}
-              onSaveHistory={onSaveHistory}
             />
           ))}
         {showVideo && (
@@ -137,16 +94,11 @@ function Main({ chimPlayer }) {
       </div>
       {likeVideos &&
         likeVideos.map((video) => (
-          <LikeVideos
-            removeLike={removeLike}
-            key={Math.random()}
-            video={video}
-          />
-        ))}
-
-      {videoHistory &&
-        videoHistory.map((video) => (
-          <VideoHistory key={Math.random()} video={video} />
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+          <div key={video.id}>
+            <img src={video} alt="" />
+            <button type="button" onClick={removeLike} />
+          </div>
         ))}
     </div>
   );
